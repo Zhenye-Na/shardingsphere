@@ -24,9 +24,10 @@ jobs:
       - name: Build Project
         run: |
           ./mvnw -B clean install -Prelease
+      - name: Generate Jacoco Coverage report
+        run: |
+          ./mvnw jacoco:prepare-agent test install jacoco:report
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: |
-          ./mvnw jacoco:prepare-agent test install jacoco:report
