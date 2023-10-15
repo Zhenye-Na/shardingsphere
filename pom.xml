@@ -921,26 +921,35 @@
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>0.8.5</version>
+                    <configuration>
+                        <excludes>
+                            <exclude>META-INF/**</exclude>
+                        </excludes>
+                    </configuration>
                     <!-- defaults to target/jacoco.exec -->
                     <executions>
                         <!-- allow Jacoco to run -->
                         <execution>
+                            <id>prepare-agent</id>
                             <goals>
                                 <goal>prepare-agent</goal>
                             </goals>
+                            <configuration>
+                                <destFile>${project.build.directory}/coverage-reports/jacoco.exec</destFile>
+                                <propertyName>surefireArgLine</propertyName>
+                            </configuration>
                         </execution>
-                        <!--
-                            Generate the html report for the test phase
-                            https://www.eclemma.org/jacoco/trunk/doc/report-mojo.html
-                        -->
                         <execution>
                             <id>report</id>
-                            <!-- generate coverage report for test phase -->
-                            <!-- target/site/jacoco -->
+                            <phase>prepare-package</phase>
                             <phase>test</phase>
                             <goals>
                                 <goal>report</goal>
                             </goals>
+                            <configuration>
+                                <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
+                                <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
